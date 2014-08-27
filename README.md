@@ -7,7 +7,7 @@ CodeCarbon plugin for sublime text. Allows for insertion of code snippets from t
 ![Plugin impression](https://raw.githubusercontent.com/RRMoelker/codecarbon-sublime/master/codecarbon_sublimeplugin_impression.png)
 
 ## Important
-This plugin is still *under development*. And an *user account* on CodeCarbon.io is *needed* for api authentication.
+This plugin is still *under development*. You need sublime text *version 2* for it to function. And an *user account* on CodeCarbon.io is *needed* for api authentication.
 
 
 ## Install
@@ -34,7 +34,7 @@ Where `<username>` and `<apikey>` are replaced by your personal credentials. The
 ## Usage
 Every time you wish to insert a code snippet you need to start the plugin and then browse to the desired snippet. There are two ways to start the plugin.
 
-1. Using the command pallete, ctrl+shift+p or cmd+shift+p opens the command pallete. Type codecarbon and press enter to select the CodeCarbon plugin.
+1. Using the command palette, ctrl+shift+p or cmd+shift+p opens the command palette. Type codecarbon and press enter to select the CodeCarbon plugin.
 1. Using the shortcut defined in the installation, default is ctrl+shift+x
 
 Once the plugin is started you can start typing and press enter to search for a concept. Once navigated through the options the snippet will be inserted at the cursor position.
