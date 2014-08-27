@@ -1,0 +1,43 @@
+//Commands for command pallete (ctrl-shift-p)
+[
+    {
+        "caption": "Preferences: CodeCarbon Key Bindings – Default",
+        "command": "open_file",
+        "args": {
+            "file": "${packages}/CodeCarbon/Default (OSX).sublime-keymap",
+            "platform": "OSX"
+        }
+    },
+    {
+        "caption": "Preferences: CodeCarbon Key Bindings – Default",
+        "command": "open_file",
+        "args": {
+            "file": "${packages}/CodeCarbon/Default (Linux).sublime-keymap",
+            "platform": "Linux"
+        }
+    },
+    {
+        "caption": "Preferences: CodeCarbon Key Bindings – User",
+        "command": "open_file",
+        "args": {
+            "file": "${packages}/User/Default (Windows).sublime-keymap",
+            "platform": "Windows"
+        }
+    },
+    {
+        "caption": "Preferences: CodeCarbon Key Bindings – User",
+        "command": "open_file",
+        "args": {
+            "file": "${packages}/User/Default (OSX).sublime-keymap",
+            "platform": "OSX"
+        }
+    },
+    {
+        "caption": "Preferences: CodeCarbon Key Bindings – User",
+        "command": "open_file",
+        "args": {
+            "file": "${packages}/User/Default (Linux).sublime-keymap",
+            "platform": "Linux"
+        }
+    }
+]
