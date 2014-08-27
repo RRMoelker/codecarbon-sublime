@@ -3,6 +3,9 @@ codecarbon-sublime
 
 CodeCarbon plugin for sublime text. Allows for insertion of code snippets from the website [CodeCarbon.io](http://codecarbon.io/) directly into sublime text.
 
+
+![Plugin impression](https://raw.githubusercontent.com/RRMoelker/codecarbon-sublime/master/codecarbon_sublimeplugin_impression.png)
+
 ## Important
 This plugin is still *under development*. And an *user account* on CodeCarbon.io is *needed* for api authentication.
 
