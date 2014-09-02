@@ -123,7 +123,14 @@ class CodecarbonCommand(sublime_plugin.TextCommand): # Codecarbon is not camelca
         concept_id = concept_object.get('id')
         concept_detail = self.api.get_concept_detail(concept_id)
         method_list = concept_detail.get('methods')
-        method_ids = [x.get('id') for x in method_list]
+
+        # list of method_uri's to list of method_id's
+        matcher = re.compile('/(\d+)/')
+        method_ids = []
+        for uri in method_list:
+            result = matcher.search(uri)
+            if result:
+                method_ids.append(result.group(1))
         method_details = self.api.get_methods_detail(method_ids)
         self.object_list = method_details.get('objects')
         self.list = []
