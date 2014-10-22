@@ -5,16 +5,16 @@ import sublime
 import sublime_plugin
 import urllib
 
-class CodecarbonApi:
+class CodecookApi:
     """
-    Interfaces with codecarbon website to get concepts, methods and snippets
+    Interfaces with codecook website to get concepts, methods and snippets
     """
 
     def __init__(self, username, key, api_url):
         self.username = username
         self.key      = key
         self.api_url  = api_url
-    
+
     def get_authentication_params(self):
         """
         Returns authentication GET params for url
@@ -43,7 +43,7 @@ class CodecarbonApi:
     def get_method_detail(self, id):
         url = '/method/%d/' % id
         return self.get_url_data(url)
-        
+
 
 
     def get_url_data(self, url, get_started=False):
@@ -62,9 +62,9 @@ class CodecarbonApi:
 
 required_settings = ['cc_user', 'cc_key', 'cc_api_url', ]
 
-class CodecarbonCommand(sublime_plugin.TextCommand): # Codecarbon is not camelcased so action name is 'codecarbon' not 'code_carbon'
+class CodecookCommand(sublime_plugin.TextCommand): # Codecook is not camelcased so action name is 'codecook' not 'code_carbon'
     """
-    Search and inserts snippets from CodeCarbon.io website.
+    Search and inserts snippets from CodeCook.io website.
     """
 
     def run(self, edit):
@@ -77,20 +77,23 @@ class CodecarbonCommand(sublime_plugin.TextCommand): # Codecarbon is not camelca
 
     def init_api(self):
         """
-        Retrieve user and package settings and start CodeCarbon api.
+        Retrieve user and package settings and start CodeCook api.
         """
         settings = self.view.settings()
         user = settings.get('cc_user')
         key = settings.get('cc_key')
         api_url = settings.get('cc_api_url')
+        print user
+        print key
+        print api_url
         if user == None or key == None:
-            sublime.error_message("Username and key need te defined (keys: 'cc_user' and 'cc_key'). Go to CodeCarbon.io for an account and key")
+            sublime.error_message("Username and key need to be defined (keys: 'cc_user' and 'cc_key'). Go to CodeCook.io for an account and key")
             return
         if api_url == None:
             sublime.error_message("Not all settings found. Did you set:\n" + "\n".join(required_settings))
             return
-        self.api = CodecarbonApi(user, key, api_url)
-            
+        self.api = CodecookApi(user, key, api_url)
+
     def show_search_window(self):
         self.view.window().show_input_panel('Search', '', self.on_search_done, None, None)
 
@@ -151,7 +154,7 @@ class CodecarbonCommand(sublime_plugin.TextCommand): # Codecarbon is not camelca
 
         method_id = self.object_list[index].get('id')
         method_detail = self.api.get_method_detail(method_id)
-        
+
         self.object_list = method_detail.get('snippets')
         self.list = [x.get('content')[:50] for x in self.object_list]
         self.view.window().show_quick_panel(self.list, self.on_snippet_chosen)

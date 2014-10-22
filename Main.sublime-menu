@@ -14,23 +14,23 @@
                 "children":
                 [
                     {
-                        "caption": "CodeCarbon",
+                        "caption": "CodeCook",
                         "children":
                         [
                             {
-                                "command": "open_file", 
-                                "args": {"file": "${packages}/CodeCarbon/Preferences.sublime-settings"},
+                                "command": "open_file",
+                                "args": {"file": "${packages}/CodeCook/Preferences.sublime-settings"},
                                 "caption": "Settings – Default"
                             },
                             {
-                                "command": "open_file", 
+                                "command": "open_file",
                                 "args": {"file": "${packages}/User/Preferences.sublime-settings"},
                                 "caption": "Settings – User"
                             },
                             {
                                 "command": "open_file",
                                 "args": {
-                                    "file": "${packages}/CodeCarbon/Default (Windows).sublime-keymap",
+                                    "file": "${packages}/CodeCook/Default (Windows).sublime-keymap",
                                     "platform": "Windows"
                                 },
                                 "caption": "Key Bindings – Default"
@@ -38,7 +38,7 @@
                             {
                                 "command": "open_file",
                                 "args": {
-                                    "file": "${packages}/CodeCarbon/Default (OSX).sublime-keymap",
+                                    "file": "${packages}/CodeCook/Default (OSX).sublime-keymap",
                                     "platform": "OSX"
                                 },
                                 "caption": "Key Bindings – Default"
@@ -46,7 +46,7 @@
                             {
                                 "command": "open_file",
                                 "args": {
-                                    "file": "${packages}/CodeCarbon/Default (Linux).sublime-keymap",
+                                    "file": "${packages}/CodeCook/Default (Linux).sublime-keymap",
                                     "platform": "Linux"
                                 },
                                 "caption": "Key Bindings – Default"
