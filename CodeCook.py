@@ -17,7 +17,7 @@ class CodecookApi:
 
     def get_authentication_params(self):
         """
-        Returns authentication GET params for url
+        Returns authentication GET params for url`
         """
         return "username="+str(self.username)+"&api_key="+str(self.key)
 
@@ -71,6 +71,7 @@ class CodecookCommand(sublime_plugin.TextCommand): # Codecook is not camelcased 
         """
         Initialise api and show search window
         """
+        self.edit = edit
         self.init_api()
         if self.api:
             self.show_search_window()
@@ -83,9 +84,6 @@ class CodecookCommand(sublime_plugin.TextCommand): # Codecook is not camelcased 
         user = settings.get('cc_user')
         key = settings.get('cc_key')
         api_url = settings.get('cc_api_url')
-        print user
-        print key
-        print api_url
         if user == None or key == None:
             sublime.error_message("Username and key need to be defined (keys: 'cc_user' and 'cc_key'). Go to CodeCook.io for an account and key")
             return
@@ -175,9 +173,8 @@ class CodecookCommand(sublime_plugin.TextCommand): # Codecook is not camelcased 
         selection = view_selection[0] #store selection
 
         #actually insert snippet content:
-        self.view.run_command(
-                "insert_my_text", {"args":
-                {'text': content}})
+        # print "inserting: " + str(content)
+        self.view.insert(self.edit, self.view.sel()[0].begin(), content)
 
         # Find first {{}} pattern and select multiple if available
         start = selection.a
@@ -192,3 +189,4 @@ class CodecookCommand(sublime_plugin.TextCommand): # Codecook is not camelcased 
             view_selection.clear()
             for match in matches:
                 view_selection.add(match)
+
