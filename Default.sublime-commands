@@ -1,6 +1,10 @@
 //Commands for command pallete (ctrl-shift-p)
 [
     {
+        "caption": "CodeCook - find and insert snippet",
+        "command": "codecook"
+    },
+    {
         "caption": "Preferences: CodeCook Key Bindings – Default",
         "command": "open_file",
         "args": {

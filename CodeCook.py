@@ -1,68 +1,11 @@
 # -*- coding: utf-8 -*-
-import json
 import re
 import sublime
 import sublime_plugin
-import urllib
 
-class CodecookApi:
-    """
-    Interfaces with codecook website to get concepts, methods and snippets
-    """
+from API import CodecookApi
 
-    def __init__(self, username, key, api_url):
-        self.username = username
-        self.key      = key
-        self.api_url  = api_url
-
-    def get_authentication_params(self):
-        """
-        Returns authentication GET params for url`
-        """
-        return "username="+str(self.username)+"&api_key="+str(self.key)
-
-    # def get_concept_list(self):
-    #     url = '/concept/?limit=100'
-    #     return self.get_url_data(url, get_started=True)
-
-    def search_concept(self, query):
-        url = '/concept/search/?q=%s' % query
-        return self.get_url_data(url, get_started=True)
-
-    def get_concept_detail(self, id):
-        url = '/concept/%d/' % id
-        return self.get_url_data(url)
-
-    def get_methods_detail(self, ids):
-        """
-        @ids is list of id values
-        """
-        url = '/method/set/%s/' % ";".join(map(str, ids))
-        return self.get_url_data(url)
-
-    def get_method_detail(self, id):
-        url = '/method/%d/' % id
-        return self.get_url_data(url)
-
-
-
-    def get_url_data(self, url, get_started=False):
-        """
-        Retrieves data from REST url.
-        Prepends api domain only relative path needed.
-        @get_started means the url already contains ?, if authentication credentials are used they are appended using &.
-        """
-        get_symbol = "&" if get_started else "?"
-        url = self.api_url + url + get_symbol + self.get_authentication_params()
-        # print "opening: " + url
-        response = urllib.urlopen(url);
-        data = json.loads(response.read())
-        return data
-
-
-required_settings = ['cc_user', 'cc_key', 'cc_api_url', ]
-
-class CodecookCommand(sublime_plugin.TextCommand): # Codecook is not camelcased so action name is 'codecook' not 'code_carbon'
+class CodecookCommand(sublime_plugin.TextCommand): # Codecook is not camel cased so action name is 'codecook' not 'code_cook'
     """
     Search and inserts snippets from CodeCook.io website.
     """
@@ -83,14 +26,19 @@ class CodecookCommand(sublime_plugin.TextCommand): # Codecook is not camelcased 
         settings = self.view.settings()
         user = settings.get('cc_user')
         key = settings.get('cc_key')
-        api_url = settings.get('cc_api_url')
+
+        api_server = settings.get('cc_api_server', None)
+
         if user == None or key == None:
             sublime.error_message("Username and key need to be defined (keys: 'cc_user' and 'cc_key'). Go to CodeCook.io for an account and key")
             return
-        if api_url == None:
-            sublime.error_message("Not all settings found. Did you set:\n" + "\n".join(required_settings))
-            return
-        self.api = CodecookApi(user, key, api_url)
+
+        self.api = CodecookApi()
+        if api_server:
+            self.api.configure(user, key, api_server)
+        else:
+            self.api.configure(user, key)
+
 
     def show_search_window(self):
         self.view.window().show_input_panel('Search', '', self.on_search_done, None, None)
