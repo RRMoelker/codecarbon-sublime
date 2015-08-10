@@ -26,8 +26,7 @@ An api key and user account are needed to use this plugin. Open the user setting
 Where `<username>` and `<apikey>` are replaced by your personal credentials. The result will probably look like:
 
     {
-      <other setting>,
-      <other settings>,
+      ...
       "cc_user": "*********",
       "cc_key": "******************"
     }
