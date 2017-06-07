@@ -3,7 +3,7 @@ import re
 import sublime
 import sublime_plugin
 
-from API import CodecookApi
+from .API import CodecookApi
 
 class CodecookCommand(sublime_plugin.TextCommand): # Codecook is not camel cased so action name is 'codecook' not 'code_cook'
     """
