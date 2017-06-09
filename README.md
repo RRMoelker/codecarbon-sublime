@@ -38,3 +38,7 @@ Every time you wish to insert a code snippet you need to start the plugin and th
 1. Using the shortcut defined in the installation, default is ctrl+shift+x
 
 Once the plugin is started you can start typing and press enter to search for a concept. Once navigated through the options the snippet will be inserted at the cursor position.
+
+## Requirements
+
+* Sublime Text 3

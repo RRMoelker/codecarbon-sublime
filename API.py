@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 import json
-import urllib2
+import urllib
 
-from helpers import singleton
+from .helpers import singleton
 
-cc_api_server = "http://codecook.io"
+cc_api_server = "https://codecook.io"
 cc_api_path   = "/api/dev"
 
 
@@ -63,11 +63,13 @@ class CodecookApi:
         each request is authenticated using authorization header.
         Prepends API domain only relative path needed.
         """
-        # print "opening: " + url
-        request = urllib2.Request(url)
+        data = None
         base64string = '%s:%s' % (self.username, self.key)
-        request.add_header("Authorization", "ApiKey %s" % base64string)
-        response = urllib2.urlopen(request)
-        data = json.loads(response.read())
-        return data
+        headers = {
+            'Authorization': "ApiKey %s" % base64string,
+        }
 
+        req = urllib.request.Request(url, data, headers)
+        with urllib.request.urlopen(req) as response:
+            data = response.read()
+            return data
