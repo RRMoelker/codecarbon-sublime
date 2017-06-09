@@ -63,7 +63,6 @@ class CodecookApi:
         each request is authenticated using authorization header.
         Prepends API domain only relative path needed.
         """
-        # print "opening: " + url
         data = None
         base64string = '%s:%s' % (self.username, self.key)
         headers = {
@@ -74,7 +73,3 @@ class CodecookApi:
         with urllib.request.urlopen(req) as response:
             data = response.read()
             return data
-        # request = urllib.request.Request(url, data, headers)
-        # response = request.urlopen(request)
-        # data = json.loads(response.read())
-        # return data
