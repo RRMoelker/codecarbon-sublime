@@ -5,14 +5,15 @@ import sublime_plugin
 
 from .API import CodecookApi
 
-class CodecookCommand(sublime_plugin.TextCommand): # Codecook is not camel cased so action name is 'codecook' not 'code_cook'
+
+class CodecookCommand(sublime_plugin.TextCommand):  # Codecook is not camel cased so action name is 'codecook' not 'code_cook'
     """
     Search and inserts snippets from CodeCook.io website.
     """
 
     def run(self, edit):
         """
-        Initialise api and show search window
+        Initialise API and show search window
         """
         self.edit = edit
         self.init_api()
@@ -39,7 +40,6 @@ class CodecookCommand(sublime_plugin.TextCommand): # Codecook is not camel cased
         else:
             self.api.configure(user, key)
 
-
     def show_search_window(self):
         self.view.window().show_input_panel('Search', '', self.on_search_done, None, None)
 
@@ -59,8 +59,6 @@ class CodecookCommand(sublime_plugin.TextCommand): # Codecook is not camel cased
             self.object_list = objects
             self.list = [x.get('name') for x in self.object_list]
             self.view.window().show_quick_panel(self.list, self.on_concept_chosen)
-
-
 
     def on_concept_chosen(self, index):
         """
@@ -91,7 +89,6 @@ class CodecookCommand(sublime_plugin.TextCommand): # Codecook is not camel cased
             self.list.append(item)
         self.view.window().show_quick_panel(self.list, self.on_method_chosen)
 
-
     def on_method_chosen(self, index):
         """
         User has selected a method to insert, get all snippets for that method and prompt choice.
@@ -105,7 +102,6 @@ class CodecookCommand(sublime_plugin.TextCommand): # Codecook is not camel cased
         self.list = [x.get('content')[:50] for x in self.object_list]
         self.view.window().show_quick_panel(self.list, self.on_snippet_chosen)
 
-
     def on_snippet_chosen(self, index):
         """
         User has selected a snippet, insert it at cursor.
@@ -115,12 +111,11 @@ class CodecookCommand(sublime_plugin.TextCommand): # Codecook is not camel cased
         snippet_content = snippet_object.get('content')
         self.insert_code(snippet_content)
 
-
     def insert_code(self, content):
         view_selection = self.view.sel()
-        selection = view_selection[0] #store selection
+        selection = view_selection[0]  # store selection
 
-        #actually insert snippet content:
+        # actually insert snippet content:
         # print "inserting: " + str(content)
         self.view.insert(self.edit, self.view.sel()[0].begin(), content)
 
@@ -137,4 +132,3 @@ class CodecookCommand(sublime_plugin.TextCommand): # Codecook is not camel cased
             view_selection.clear()
             for match in matches:
                 view_selection.add(match)
-
