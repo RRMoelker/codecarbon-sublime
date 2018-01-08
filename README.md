@@ -7,7 +7,7 @@ CodeCook plugin for sublime text. Allows for insertion of code snippets from the
 ![Plugin impression](https://raw.githubusercontent.com/RRMoelker/codecook-sublime/master/codecook_sublimeplugin_impression.png)
 
 ## Important
-This plugin is still *under development*. You need sublime text *version 2* for it to function. And an *user account* on CodeCook.io is *needed* for api authentication.
+This plugin is still *under development*. You need sublime text *version 3* for it to function. And an *user account* on CodeCook.io is *needed* for api authentication.
 
 
 ## Install
@@ -42,3 +42,10 @@ Once the plugin is started you can start typing and press enter to search for a 
 ## Requirements
 
 * Sublime Text 3
+
+## Development
+
+To develop and test app, symlink from packages folder to codecook-sublime folder naming the link `CodeCook`.
+
+Sublime Text packages folder can be openened from "preferences > browse packages" or something of the sorts.
+
