@@ -4,9 +4,10 @@ import urllib
 
 from .helpers import singleton
 
-cc_api_server = "https://codecook.io"
-cc_api_path   = "/api/dev"
-
+# cc_api_server = "https://codecook.io"
+# cc_api_path   = "/api/dev"
+cc_api_server = "http://localhost:4000"
+cc_api_path   = "/graphql"
 
 @singleton
 class CodecookApi:
@@ -17,59 +18,47 @@ class CodecookApi:
     def configure(self, username, key, api_server=cc_api_server, api_path=cc_api_path):
         self.username   = username
         self.key        = key
-        self.api_server = api_server
-        self.api_path   = api_path
+        # self.api_server = api_server
+        # self.api_path   = api_path
         self.api_url    = api_server + api_path
 
     def search_concept(self, query):
-        url = '/concept/search/?q=%s' % query
-        return self.get_resource_data(url)
-
-    def get_concept_detail(self, id):
-        url = '/concept/%d/' % id
-        return self.get_resource_data(url)
-
-    def get_methods_detail(self, ids):
-        """
-        @ids is list of id values
-        """
-        url = '/method/set/%s/' % ";".join(map(str, ids))
-        return self.get_resource_data(url)
-
-    def get_method_detail(self, id):
-        url = '/method/%d/' % id
-        return self.get_resource_data(url)
+        graphqlQuery =  """{
+            snippets(query: \"%s\") {
+                name
+                code,
+                parameters {
+                  name,
+                  default
+                }
+            }
+        }""" % (query)
+        return self.query_api(graphqlQuery)
 
 
-    def get_path_data(self, path):
+    def query_api(self, graphqlQuery):
         """
-        Adds API server before path
-        e.g.: http://server/{path}
-        """
-        url = self.api_server + path
-        return self.get_url_data(url)
-
-    def get_resource_data(self, resource):
-        """
-        Adds API server and path before resource path
-        e.g.: http://server/api/v1/{resource}
-        """
-        url = self.api_url + resource
-        return self.get_url_data(url)
-
-    def get_url_data(self, url):
-        """
-        Retrieves data from REST url,
+        Retrieves data from Graphql API,
         each request is authenticated using authorization header.
-        Prepends API domain only relative path needed.
         """
-        data = None
-        base64string = '%s:%s' % (self.username, self.key)
+        data = {
+            'query': graphqlQuery
+        }
+        # base64string = '%s:%s' % (self.username, self.key)
         headers = {
-            'Authorization': "ApiKey %s" % base64string,
+            'Content-Type': 'application/json'
+            # 'Authorization': "ApiKey %s" % base64string,
         }
 
-        req = urllib.request.Request(url, data, headers)
+        jsonData = json.dumps(data).encode('utf8')
+
+        req = urllib.request.Request(self.api_url,
+            data=jsonData,
+            method='POST',
+            headers=headers
+        )
         with urllib.request.urlopen(req) as response:
-            data = response.read()
+            charset = response.info().get_param('charset', 'utf8')
+            raw = response.read()
+            data = json.loads(raw.decode(charset));
             return data

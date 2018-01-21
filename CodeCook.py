@@ -43,6 +43,7 @@ class CodecookCommand(sublime_plugin.TextCommand):  # Codecook is not camel case
     def show_search_window(self):
         self.view.window().show_input_panel('Search', '', self.on_search_done, None, None)
 
+
     def on_search_done(self, query):
         """
         User has entered search query
@@ -50,57 +51,18 @@ class CodecookCommand(sublime_plugin.TextCommand):  # Codecook is not camel case
             if len results == 0, try searching again
             else show list of concepts to choose from
         """
+        # sublime.message_dialog("No search results, please try again.")
         search_results = self.api.search_concept(query)
-        objects = search_results.get('objects')
+        objects = search_results.get('data').get('snippets');
+
         if len(objects) == 0:
             sublime.message_dialog("No search results, please try again.")
             self.show_search_window()
         else:
             self.object_list = objects
             self.list = [x.get('name') for x in self.object_list]
-            self.view.window().show_quick_panel(self.list, self.on_concept_chosen)
+            self.view.window().show_quick_panel(self.list, self.on_snippet_chosen)
 
-    def on_concept_chosen(self, index):
-        """
-        User has chosen a concept, get a list of methods to choose from and prompt user again.
-        """
-        if index == -1: return # No selection, exit
-
-        concept_object = self.object_list[index]
-        concept_id = concept_object.get('id')
-        concept_detail = self.api.get_concept_detail(concept_id)
-        method_list = concept_detail.get('methods')
-
-        # list of method_uri's to list of method_id's
-        matcher = re.compile('/(\d+)/')
-        method_ids = []
-        for uri in method_list:
-            result = matcher.search(uri)
-            if result:
-                method_ids.append(result.group(1))
-        method_details = self.api.get_methods_detail(method_ids)
-        self.object_list = method_details.get('objects')
-        self.list = []
-        for obj in self.object_list:
-            item = obj.get('main_language')
-            title = obj.get('title')
-            if title:
-                item += "- " + title
-            self.list.append(item)
-        self.view.window().show_quick_panel(self.list, self.on_method_chosen)
-
-    def on_method_chosen(self, index):
-        """
-        User has selected a method to insert, get all snippets for that method and prompt choice.
-        """
-        if index == -1: return # No selection, exit
-
-        method_id = self.object_list[index].get('id')
-        method_detail = self.api.get_method_detail(method_id)
-
-        self.object_list = method_detail.get('snippets')
-        self.list = [x.get('content')[:50] for x in self.object_list]
-        self.view.window().show_quick_panel(self.list, self.on_snippet_chosen)
 
     def on_snippet_chosen(self, index):
         """
@@ -108,16 +70,31 @@ class CodecookCommand(sublime_plugin.TextCommand):  # Codecook is not camel case
         """
         if index == -1: return # No selection, exit
         snippet_object = self.object_list[index]
-        snippet_content = snippet_object.get('content')
-        self.insert_code(snippet_content)
+        snippet_content = snippet_object.get('code')
+        snippet_parameters = snippet_object.get('parameters')
 
-    def insert_code(self, content):
+        view = sublime.active_window().active_view()
+        view.run_command(
+            "insert_text_codecook_bypass_sublime_limitations", {
+                'content': snippet_content,
+                'parameters': snippet_parameters
+            }
+        )
+
+
+class InsertTextCodecookBypassSublimeLimitationsCommand(sublime_plugin.TextCommand):
+    """
+    Inserts text, command required because plugin API is very very limited.
+    Anything async in a TextCommand destroys the abbility to interact with the editor in that command.
+    https://forum.sublimetext.com/t/how-to-run-part-of-my-plugin-in-the-second-thread-properly/18962
+    """
+    def run(self, edit, content, parameters):
         view_selection = self.view.sel()
         selection = view_selection[0]  # store selection
 
         # actually insert snippet content:
-        # print "inserting: " + str(content)
-        self.view.insert(self.edit, self.view.sel()[0].begin(), content)
+        # print("inserting: " + str(content))
+        self.view.insert(edit, self.view.sel()[0].begin(), content)
 
         # Find first {{}} pattern and select multiple if available
         start = selection.a
@@ -132,3 +109,4 @@ class CodecookCommand(sublime_plugin.TextCommand):  # Codecook is not camel case
             view_selection.clear()
             for match in matches:
                 view_selection.add(match)
+

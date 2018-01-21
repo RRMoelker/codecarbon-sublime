@@ -49,3 +49,15 @@ To develop and test app, symlink from packages folder to codecook-sublime folder
 
 Sublime Text packages folder can be openened from "preferences > browse packages" or something of the sorts.
 
+NOTE:
+Beware that Sublime will not reload properly:
+"Sublime Text will reload topmost Python modules as they change (perhaps because you are editing a .py file within Packages). By contrast, Python subpackages won’t be reloaded automatically, and this can lead to confusion while you’re developing plugins. Generally speaking, it’s best to restart Sublime Text after you’ve made changes to plugin files, so all changes can take effect."
+src: http://docs.sublimetext.info/en/latest/reference/plugins.html#automatic-plugin-reload
+
+**Probably need build tool that creates a single file from normal Python code (eventually)**.
+
+
+Also use: https://packagecontrol.io/packages/AutomaticPackageReloader
+!!!Even with AutomaticPackageReloader it still requires saving the entire import tree!!!
+
+
